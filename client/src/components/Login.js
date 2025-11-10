@@ -17,18 +17,28 @@ const Login = () => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", credentials);
-      const { role, username, user, token } = res.data;
+      // ✅ Removed extra space in URL
+      const res = await axios.post(
+        "https://quickauth-1-qq1d.onrender.com/api/auth/login",
+        credentials
+      );
 
-      // ✅ Store token & username in localStorage
+      const { user, token } = res.data;
+
+      // ✅ Extract role and username safely
+      const role = user?.role || "user";
+      const username = user?.name || user?.username || "User";
+
+      // ✅ Save auth data
       localStorage.setItem("token", token);
-      localStorage.setItem("username", user?.name || username || "User");
+      localStorage.setItem("username", username);
+      localStorage.setItem("role", role);
 
       // ✅ Redirect based on role
       if (role === "admin") {
-        navigate("/admin-dashboard", { state: { username: user?.name || username } });
+        navigate("/admin-dashboard", { state: { username } });
       } else {
-        navigate("/user-dashboard", { state: { username: user?.name || username } });
+        navigate("/user-dashboard", { state: { username } });
       }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password");
@@ -95,4 +105,3 @@ const Login = () => {
 };
 
 export default Login;
-
