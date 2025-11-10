@@ -18,7 +18,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(" https://quickauth-1-qq1d.onrender.com/api/auth/register", formData);
+      await axios.post(" https://quickauth-1-qq1d.onrender.com/api/auth/register", formData);
       alert("Registration successful!");
       navigate("/login");
     } catch (err) {
